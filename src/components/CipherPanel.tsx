@@ -157,18 +157,54 @@ const CipherPanel = () => {
                   </label>
                   <motion.button
                     onClick={handleCopy}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="flex items-center gap-1 text-xs font-mono text-primary hover:text-primary/80 transition-colors"
+                    whileHover={{ scale: 1.05, boxShadow: "0 0 20px hsl(160 100% 45% / 0.3)" }}
+                    whileTap={{ scale: 0.93 }}
+                    className={`
+                      relative flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-xs font-semibold uppercase tracking-wider transition-all duration-300 overflow-hidden border
+                      ${copied
+                        ? "bg-primary/20 border-primary/40 text-primary"
+                        : "bg-secondary border-border text-muted-foreground hover:text-primary hover:border-primary/30"
+                      }
+                    `}
                   >
+                    {copied && (
+                      <motion.div
+                        className="absolute inset-0 bg-primary/10"
+                        initial={{ scale: 0, borderRadius: "50%" }}
+                        animate={{ scale: 3, borderRadius: "0%" }}
+                        transition={{ duration: 0.5 }}
+                      />
+                    )}
                     <AnimatePresence mode="wait">
                       {copied ? (
-                        <motion.span key="check" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} className="flex items-center gap-1">
-                          <Check size={14} /> Copied!
+                        <motion.span
+                          key="check"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          transition={{ duration: 0.2 }}
+                          className="relative z-10 flex items-center gap-2"
+                        >
+                          <motion.div
+                            initial={{ scale: 0, rotate: -90 }}
+                            animate={{ scale: 1, rotate: 0 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                          >
+                            <Check size={14} />
+                          </motion.div>
+                          Copied!
                         </motion.span>
                       ) : (
-                        <motion.span key="copy" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} className="flex items-center gap-1">
-                          <Copy size={14} /> Copy
+                        <motion.span
+                          key="copy"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          transition={{ duration: 0.2 }}
+                          className="relative z-10 flex items-center gap-2"
+                        >
+                          <Copy size={14} />
+                          Copy
                         </motion.span>
                       )}
                     </AnimatePresence>
