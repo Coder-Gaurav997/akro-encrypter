@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Lock, Unlock, Copy, Check, ArrowRight, Sparkles } from "lucide-react";
+import { Lock, Unlock, Copy, Check, ArrowRight, Sparkles, Trash2 } from "lucide-react";
 import { encrypt, decrypt } from "@/lib/akro";
 import { toast } from "sonner";
 
@@ -93,9 +93,22 @@ const CipherPanel = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1, duration: 0.4 }}
           >
-            <label className="block text-xs font-mono uppercase tracking-widest text-muted-foreground mb-2">
-              {mode === "encrypt" ? "Plain Text" : "Encrypted Text"}
-            </label>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
+                {mode === "encrypt" ? "Plain Text" : "Encrypted Text"}
+              </label>
+              {input && (
+                <motion.button
+                  onClick={() => { setInput(""); setOutput(""); }}
+                  whileHover={{ scale: 1.05, boxShadow: "0 0 20px hsl(0 70% 55% / 0.3)" }}
+                  whileTap={{ scale: 0.93 }}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg font-mono text-xs font-semibold uppercase tracking-wider bg-secondary border border-border text-muted-foreground hover:text-destructive hover:border-destructive/30 transition-all duration-300"
+                >
+                  <Trash2 size={12} />
+                  Clear
+                </motion.button>
+              )}
+            </div>
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
