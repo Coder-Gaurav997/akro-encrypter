@@ -13,11 +13,12 @@ const floatingIcons = [
 ];
 
 const bubbles = Array.from({ length: 30 }).map((_, i) => ({
-  size: 8 + Math.random() * 40,
+  size: 10 + Math.random() * 50,
   left: Math.random() * 100,
   delay: Math.random() * 8,
   duration: 6 + Math.random() * 10,
-  opacity: 0.05 + Math.random() * 0.12,
+  opacity: 0.15 + Math.random() * 0.25,
+  color: i % 3 === 0 ? "hsl(170 100% 45%)" : i % 3 === 1 ? "hsl(300 80% 55%)" : "hsl(200 90% 50%)",
 }));
 
 const Index = () => {
@@ -25,17 +26,14 @@ const Index = () => {
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
-      {/* Scan line effect */}
-      <div className="pointer-events-none fixed inset-0 z-50">
-        <div className="absolute inset-x-0 h-px bg-primary/10 animate-scan-line" />
-      </div>
+      {/* Removed scan line */}
 
       {/* Grid background */}
       <div
-        className="pointer-events-none fixed inset-0 opacity-[0.03]"
+        className="pointer-events-none fixed inset-0 opacity-[0.04]"
         style={{
-          backgroundImage: `linear-gradient(hsl(45 100% 55% / 0.3) 1px, transparent 1px),
-            linear-gradient(90deg, hsl(45 100% 55% / 0.3) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(hsl(170 100% 45% / 0.3) 1px, transparent 1px),
+            linear-gradient(90deg, hsl(300 80% 55% / 0.2) 1px, transparent 1px)`,
           backgroundSize: "60px 60px",
         }}
       />
@@ -44,12 +42,15 @@ const Index = () => {
       {bubbles.map((b, i) => (
         <motion.div
           key={`bubble-${i}`}
-          className="pointer-events-none fixed rounded-full border border-primary/20"
+          className="pointer-events-none fixed rounded-full"
           style={{
             width: b.size,
             height: b.size,
             left: `${b.left}%`,
             bottom: `-${b.size}px`,
+            border: `1.5px solid ${b.color}`,
+            background: `radial-gradient(circle at 30% 30%, ${b.color.replace(')', ' / 0.25)')}, transparent 70%)`,
+            boxShadow: `0 0 ${b.size / 2}px ${b.color.replace(')', ' / 0.2)')}, inset 0 0 ${b.size / 3}px ${b.color.replace(')', ' / 0.1)')}`,
           }}
           animate={{
             y: [0, -(window.innerHeight + b.size + 100)],
@@ -63,9 +64,7 @@ const Index = () => {
             delay: b.delay,
             ease: "easeInOut",
           }}
-        >
-          <div className="w-full h-full rounded-full bg-primary/10" />
-        </motion.div>
+        />
       ))}
 
       {/* Radial glows */}
@@ -331,8 +330,8 @@ const Index = () => {
           >
             <motion.span
               className="text-primary inline-block"
-              style={{ textShadow: "0 0 40px hsl(45 100% 55% / 0.6)" }}
-              animate={{ textShadow: ["0 0 20px hsl(45 100% 55% / 0.3)", "0 0 50px hsl(45 100% 55% / 0.7)", "0 0 20px hsl(45 100% 55% / 0.3)"] }}
+              style={{ textShadow: "0 0 40px hsl(170 100% 45% / 0.6)" }}
+              animate={{ textShadow: ["0 0 20px hsl(170 100% 45% / 0.3)", "0 0 50px hsl(170 100% 45% / 0.7)", "0 0 20px hsl(170 100% 45% / 0.3)"] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             >
               AKRO
