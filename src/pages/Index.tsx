@@ -58,7 +58,7 @@ const Index = () => {
       {/* About AKRO Button - Top Right */}
       <motion.button
         onClick={() => setShowAbout(true)}
-        className="fixed top-5 right-5 z-40 flex items-center gap-2 bg-card border border-border rounded-full px-4 py-2.5 font-mono text-xs uppercase tracking-widest text-muted-foreground hover:text-primary hover:border-primary/40 transition-all duration-300"
+        className="fixed top-5 right-5 z-40 flex items-center justify-center gap-2 bg-card border border-border rounded-full px-2.5 py-2.5 md:px-4 font-mono text-xs uppercase tracking-widest text-muted-foreground hover:text-primary hover:border-primary/40 transition-all duration-300"
         whileHover={{ scale: 1.05, boxShadow: "0 0 25px hsl(45 100% 55% / 0.2)" }}
         whileTap={{ scale: 0.95 }}
         initial={{ opacity: 0, x: 30 }}
@@ -66,7 +66,7 @@ const Index = () => {
         transition={{ delay: 1, duration: 0.5 }}
       >
         <Info size={14} />
-        About AKRO
+        <span className="hidden md:inline">About AKRO</span>
       </motion.button>
 
       {/* About Modal */}
