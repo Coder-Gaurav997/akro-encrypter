@@ -1,23 +1,14 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Shield, Lock, Zap, Binary, Info, X, User, Code, Key, Shuffle, ArrowDownUp } from "lucide-react";
 import CipherPanel from "@/components/CipherPanel";
 
-const floatingIcons = [
-  { icon: Lock, x: "10%", y: "20%", delay: 0 },
-  { icon: Zap, x: "85%", y: "15%", delay: 0.5 },
-  { icon: Binary, x: "5%", y: "70%", delay: 1 },
-  { icon: Shield, x: "90%", y: "65%", delay: 1.5 },
-  { icon: Key, x: "15%", y: "85%", delay: 2 },
-  { icon: Shuffle, x: "80%", y: "45%", delay: 0.8 },
-];
-
-const bubbles = Array.from({ length: 30 }).map((_, i) => ({
-  size: 10 + Math.random() * 50,
+const bubbles = Array.from({ length: 12 }).map((_, i) => ({
+  size: 12 + Math.random() * 40,
   left: Math.random() * 100,
   delay: Math.random() * 8,
-  duration: 6 + Math.random() * 10,
-  opacity: 0.15 + Math.random() * 0.25,
+  duration: 8 + Math.random() * 12,
+  opacity: 0.2 + Math.random() * 0.25,
   color: i % 3 === 0 ? "hsl(170 100% 45%)" : i % 3 === 1 ? "hsl(300 80% 55%)" : "hsl(200 90% 50%)",
 }));
 
@@ -38,94 +29,31 @@ const Index = () => {
         }}
       />
 
-      {/* Floating Bubbles */}
+      {/* Floating Bubbles - CSS animated */}
       {bubbles.map((b, i) => (
-        <motion.div
+        <div
           key={`bubble-${i}`}
-          className="pointer-events-none fixed rounded-full"
+          className="pointer-events-none fixed rounded-full animate-bubble"
           style={{
             width: b.size,
             height: b.size,
             left: `${b.left}%`,
             bottom: `-${b.size}px`,
             border: `1.5px solid ${b.color}`,
-            background: `radial-gradient(circle at 30% 30%, ${b.color.replace(')', ' / 0.25)')}, transparent 70%)`,
-            boxShadow: `0 0 ${b.size / 2}px ${b.color.replace(')', ' / 0.2)')}, inset 0 0 ${b.size / 3}px ${b.color.replace(')', ' / 0.1)')}`,
-          }}
-          animate={{
-            y: [0, -(window.innerHeight + b.size + 100)],
-            x: [0, Math.sin(i) * 60, 0],
-            opacity: [0, b.opacity, b.opacity, 0],
-            scale: [0.5, 1, 1, 0.8],
-          }}
-          transition={{
-            duration: b.duration,
-            repeat: Infinity,
-            delay: b.delay,
-            ease: "easeInOut",
+            background: `radial-gradient(circle at 30% 30%, ${b.color.replace(')', ' / 0.3)')}, transparent 70%)`,
+            boxShadow: `0 0 ${b.size / 2}px ${b.color.replace(')', ' / 0.25)')}`,
+            animationDuration: `${b.duration}s`,
+            animationDelay: `${b.delay}s`,
+            ['--bubble-opacity' as any]: b.opacity,
           }}
         />
       ))}
 
-      {/* Radial glows */}
+      {/* Radial glows - static, no animation */}
       <div className="pointer-events-none fixed inset-0">
-        <motion.div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-primary/5 rounded-full blur-[120px]"
-          animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.8, 0.5] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute bottom-0 right-1/4 w-[500px] h-[400px] bg-accent/5 rounded-full blur-[100px]"
-          animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        />
-        <motion.div
-          className="absolute top-1/3 left-1/4 w-[300px] h-[300px] bg-accent/3 rounded-full blur-[80px]"
-          animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 4 }}
-        />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-primary/5 rounded-full blur-[120px] opacity-60" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[400px] bg-accent/5 rounded-full blur-[100px] opacity-40" />
       </div>
-
-      {/* Floating icons */}
-      {floatingIcons.map(({ icon: Icon, x, y, delay }, i) => (
-        <motion.div
-          key={i}
-          className="pointer-events-none fixed text-primary/10 hidden md:block"
-          style={{ left: x, top: y }}
-          animate={{
-            y: [0, -20, 0],
-            rotate: [0, 10, -10, 0],
-            opacity: [0.1, 0.25, 0.1],
-          }}
-          transition={{ duration: 5 + i, repeat: Infinity, delay, ease: "easeInOut" }}
-        >
-          <Icon size={40 + i * 8} />
-        </motion.div>
-      ))}
-
-      {/* Particle dots */}
-      {Array.from({ length: 30 }).map((_, i) => (
-        <motion.div
-          key={`particle-${i}`}
-          className="pointer-events-none fixed rounded-full bg-primary/20 hidden md:block"
-          style={{
-            width: 1 + Math.random() * 3,
-            height: 1 + Math.random() * 3,
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-          }}
-          animate={{
-            opacity: [0, 0.6, 0],
-            scale: [0, 1.5, 0],
-          }}
-          transition={{
-            duration: 3 + Math.random() * 4,
-            repeat: Infinity,
-            delay: Math.random() * 5,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
 
       {/* About AKRO Button - Top Right */}
       <motion.button
@@ -314,9 +242,9 @@ const Index = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3, duration: 0.5, type: "spring" }}
           >
-            <motion.div animate={{ rotate: [0, 360] }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }}>
+            <div className="animate-spin" style={{ animationDuration: '10s' }}>
               <Shield size={14} className="text-primary" />
-            </motion.div>
+            </div>
             <span className="text-xs font-mono uppercase tracking-widest text-primary">
               Custom Encryption
             </span>
@@ -328,14 +256,11 @@ const Index = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2, duration: 0.6, type: "spring", stiffness: 200 }}
           >
-            <motion.span
-              className="text-primary inline-block"
-              style={{ textShadow: "0 0 40px hsl(170 100% 45% / 0.6)" }}
-              animate={{ textShadow: ["0 0 20px hsl(170 100% 45% / 0.3)", "0 0 50px hsl(170 100% 45% / 0.7)", "0 0 20px hsl(170 100% 45% / 0.3)"] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            <span
+              className="text-primary inline-block animate-akro-glow"
             >
               AKRO
-            </motion.span>
+            </span>
           </motion.h1>
 
           <motion.p
