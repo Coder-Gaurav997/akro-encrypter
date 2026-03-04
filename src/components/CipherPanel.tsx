@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Lock, Unlock, Copy, Check, ArrowRight, Sparkles, Trash2 } from "lucide-react";
+import { Lock, Unlock, Copy, Check, ArrowRight, Sparkles, Trash2, Eye, EyeOff, Key } from "lucide-react";
 import { encrypt, decrypt } from "@/lib/akro";
 import { toast } from "sonner";
 
@@ -9,9 +9,11 @@ type Mode = "encrypt" | "decrypt";
 const CipherPanel = () => {
   const [mode, setMode] = useState<Mode>("encrypt");
   const [input, setInput] = useState("");
+  const [customKey, setCustomKey] = useState("");
   const [output, setOutput] = useState("");
   const [copied, setCopied] = useState(false);
   const [processing, setProcessing] = useState(false);
+  const [showKey, setShowKey] = useState(false);
 
   const handleProcess = () => {
     if (!input.trim()) {
@@ -22,7 +24,8 @@ const CipherPanel = () => {
     setOutput("");
     // Simulate a short processing delay for dramatic effect
     setTimeout(() => {
-      const result = mode === "encrypt" ? encrypt(input) : decrypt(input);
+      const key = customKey.trim() || undefined;
+      const result = mode === "encrypt" ? encrypt(input, key) : decrypt(input, key);
       setOutput(result);
       setProcessing(false);
     }, 600);
@@ -87,6 +90,34 @@ const CipherPanel = () => {
           transition={{ duration: 0.4, ease: "easeOut" }}
           className="space-y-6"
         >
+          {/* Custom Key */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.05, duration: 0.4 }}
+          >
+            <label className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-2 flex items-center gap-1.5">
+              <Key size={12} />
+              Encryption Key
+            </label>
+            <div className="relative">
+              <input
+                type={showKey ? "text" : "password"}
+                value={customKey}
+                onChange={(e) => setCustomKey(e.target.value)}
+                placeholder="Default: AKRO"
+                className="w-full bg-secondary border border-border rounded-lg px-4 py-2.5 pr-10 font-mono text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300"
+              />
+              <button
+                type="button"
+                onClick={() => setShowKey(!showKey)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {showKey ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
+          </motion.div>
+
           {/* Input */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}

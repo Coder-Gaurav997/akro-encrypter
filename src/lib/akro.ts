@@ -1,6 +1,6 @@
 // AKRO Encryption Algorithm - TypeScript Port
 
-const DEFAULT_KEY = "KEY";
+const DEFAULT_KEY = "AKRO";
 
 // Convert text to comma-separated ASCII values
 function convertToAscii(text: string): string {
